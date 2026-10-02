@@ -81,8 +81,8 @@
   },
   "EmptyFolders": [
     "lib-log-writer",
-    "lib-log-writer/log messages",
     "lib-log-writer/log timing",
-    "lib-log-writer/log writers"
+    "lib-loger",
+    "lib-loger/log writers"
   ]
 }

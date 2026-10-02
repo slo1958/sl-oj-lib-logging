@@ -1,4 +1,4 @@
-Public Class clLoginMessageEntry
+Private Class clLoginMessageEntry
 
     Public Property MessageId As String
     Public Property MessageSeverity As String

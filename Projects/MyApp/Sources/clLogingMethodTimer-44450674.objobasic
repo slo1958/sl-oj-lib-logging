@@ -1,4 +1,4 @@
-Public Class clLogingMethodTimer
+Private Class clLogingMethodTimer
 
     Public Sub EnterMethod()
     timers.Append(New clLogingTaskTimer(Self.MethodName))
@@ -24,10 +24,13 @@ Public Class clLogingMethodTimer
     Var totexecution As Double
 
     For Each entry As clLogingTaskTimer In Self.Timers
-      If entry.Completed Then
+      If entry.Completed() Then
+        Pragma note "Nothing to do"
+
       Else
         count = count + 1
-        totexecution = totexecution + entry.GetExecutionTime
+        totexecution = totexecution + entry.GetExecutionTime()
+
       End If
 
     Next

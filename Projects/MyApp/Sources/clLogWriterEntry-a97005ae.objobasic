@@ -1,0 +1,13 @@
+Public Class clLogWriterEntry
+
+    Public Property Identity As String
+    Public Property Enabled As Boolean
+    Public Property logWriter As itfLogWriter
+    Public Constructor(WriterID As string, Writer As itfLogWriter)
+
+    Self.Identity = WriterID
+    Self.Enabled = True
+    Self.logWriter = Writer
+
+    End Constructor
+End Class

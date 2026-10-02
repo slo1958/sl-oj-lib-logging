@@ -9,7 +9,7 @@ Public Class clLogingMethodStats
     End Constructor
     Public Property Count As integer
     Public Property Duration As Double
-    Public Sub Average(double)
+    Public Function Average() As double
     If Self.Count < 1 Then
       Return 0
     Else
@@ -17,5 +17,5 @@ Public Class clLogingMethodStats
 
     End If
 
-    End Sub
+    End Function
 End Class
