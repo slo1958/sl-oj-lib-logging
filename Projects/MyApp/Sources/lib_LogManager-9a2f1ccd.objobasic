@@ -1,4 +1,4 @@
-Public Module md
+Public Module lib_LogManager
 
 Public Const MY_CONSTANT As String = "abc"
 Private Const cDefaultFormatExecutionTime as String =" ###,###.000"

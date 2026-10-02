@@ -1,6 +1,6 @@
 {
   "Version": 6,
-  "Name": "md",
+  "Name": "lib_LogManager",
   "Id": "9a2f1ccd-6316-4e18-8b13-582ac7bce5ff",
   "Kind": "Module",
   "BuildScope": "Application",
@@ -9,7 +9,7 @@
   "ParentModule": "",
   "ParentModuleId": "",
   "AvailableInDesigner": false,
-  "CodeFile": "md-9a2f1ccd.objobasic",
+  "CodeFile": "lib_LogManager-9a2f1ccd.objobasic",
   "LayoutFile": "",
   "Notes": [],
   "InspectorBehaviour": []
