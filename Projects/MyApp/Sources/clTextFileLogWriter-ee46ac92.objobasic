@@ -1,0 +1,96 @@
+Public Class clTextFileLogWriter Inherits clGenericLogWriter
+
+  Public Const kMessage As string = "Message"
+    Sub MyMethod()
+    End Sub
+    Public Property field_separator As String
+    Public Constructor(the_folder As FileSystemItem, the_file_name As string, Optional TimeStampPlaceHolder As string = "")
+
+    Super.Constructor()
+
+    field_separator = Chr(9)
+
+    If the_file_name.Trim().Length > 0 And the_folder <> Nothing Then
+      SetFilePath(the_folder, the_file_name, TimeStampPlaceHolder)
+
+    End If
+
+    Return
+
+    End Constructor
+    Public Property file_path As FileSystemItem
+    Public Sub SetFilePath(the_folder As FileSystemItem, the_file_name As string, Optional TimeStampPlaceHolder As string = "")
+    Var tmp_file_path As FileSystemItem
+
+    If TimeStampPlaceHolder.Length > 0 Then
+      Var tmp_time As String = DateTime.Now.ToSQLDateTime()
+      tmp_time = tmp_time.Replace("-", "")
+      tmp_time = tmp_time.Replace(":", "")
+      tmp_time = tmp_time.Replace(" ", "_")
+
+      tmp_file_path = the_folder.Child(the_file_name.Replace(TimeStampPlaceHolder, tmp_time))
+
+    Else
+      tmp_file_path = the_folder.Child(the_file_name)
+
+    End If
+
+    file_path = New FileSystemItem(tmp_file_path.Path)
+
+    Try
+      Var output As TextStream = New TextStream(file_path, TextEncoding.UTF8)
+
+      Var field_names() As String
+      field_names.Append(kWhen)
+      field_names.Append(kWho)
+      field_names.Append(kSeverity)
+      field_names.Append(kMessage)
+
+      output.WriteLine(field_names.Join(field_separator))
+
+      output.Close()
+
+      file_Error = ""
+
+    Catch e As IOException
+      file_Error = "Error creating log file: " + e.Message
+
+    End Try
+
+    Return
+    End Sub
+  Public Const kSeverity As string = "Severity"
+  Public Const kWhen As string = "When"
+  Public Const kWho As string = "Who"
+    Public Function GetFilePath() As FileSystemItem
+    Return self.file_path
+    End Function
+    Public Property file_error As String
+    Public Function getFileError() As String
+    Return Self.file_error
+
+    End Function
+    Public Override Sub AddLogEntry(MessageSeverity As string, MessageTime As string, MessageSource As string, MessageText As string)
+    # Part of the itfLogingWriter interface.
+
+    If Not Self.AcceptSeverity(MessageSeverity) Then Return
+
+
+    Try
+
+      Var tmp_line() As String = array(MessageTime, MessageSource, MessageSeverity, MessageText)
+      Var Text As String = tmp_line.Join(field_separator)
+
+      file_path.AppendLine(text)
+
+      file_Error = ""
+
+    Catch e As IOException
+      file_Error = "Error appending to log: " + e.Message
+
+    End Try
+
+    Return
+
+    End Sub
+End Class

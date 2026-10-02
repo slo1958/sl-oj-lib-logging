@@ -80,8 +80,7 @@
     "SupportedLocales": []
   },
   "EmptyFolders": [
-    "lib-log-writer",
-    "lib-loger",
-    "lib-loger/log writers"
+    "lib-loging",
+    "lib-loging/lib-log-writer"
   ]
 }

@@ -5,7 +5,7 @@
   "Kind": "Class",
   "BuildScope": "Application",
   "Namespace": "",
-  "Folder": "lib-loger/log writers",
+  "Folder": "lib-loging/lib-log-writer",
   "ParentModule": "",
   "ParentModuleId": "",
   "AvailableInDesigner": false,

@@ -5,7 +5,7 @@
   "Kind": "Module",
   "BuildScope": "Application",
   "Namespace": "",
-  "Folder": "",
+  "Folder": "lib-loging",
   "ParentModule": "",
   "ParentModuleId": "",
   "AvailableInDesigner": false,

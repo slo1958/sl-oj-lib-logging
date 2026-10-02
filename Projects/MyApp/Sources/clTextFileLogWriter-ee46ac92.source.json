@@ -1,0 +1,16 @@
+{
+  "Version": 6,
+  "Name": "clTextFileLogWriter",
+  "Id": "ee46ac92-a4cd-48a0-8a8a-fde063681b99",
+  "Kind": "Class",
+  "BuildScope": "Application",
+  "Namespace": "",
+  "Folder": "lib-loging/lib-log-writer",
+  "ParentModule": "",
+  "ParentModuleId": "",
+  "AvailableInDesigner": false,
+  "CodeFile": "clTextFileLogWriter-ee46ac92.objobasic",
+  "LayoutFile": "",
+  "Notes": [],
+  "InspectorBehaviour": []
+}
