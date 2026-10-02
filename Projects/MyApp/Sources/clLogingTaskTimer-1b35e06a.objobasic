@@ -1,0 +1,31 @@
+Public Class clLogingTaskTimer
+
+    Public Constructor(pTaskId As string)
+
+    Self.Identifier = pTaskId
+    Self.StartTime = System.TicksMilliseconds
+    Self.EndTime = -1
+
+
+    End Constructor
+    Public Sub Done()
+    Self.EndTime = System.TicksMilliseconds
+
+    End Sub
+    Public Function GetExecutionTime() As double
+    If Self.EndTime > 0 Then
+      Return(Self.EndTime - Self.StartTime) / 1000
+
+    Else
+      Return 0
+
+    End If
+
+    End Function
+    Public Function Completed() As Boolean
+    return self.EndTime > 0
+    End Function
+    Public Property Identifier As String
+    Public Property StartTime As Double
+    Public Property EndTime As Double
+End Class

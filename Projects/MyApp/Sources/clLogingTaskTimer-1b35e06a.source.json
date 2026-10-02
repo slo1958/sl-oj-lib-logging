@@ -1,0 +1,16 @@
+{
+  "Version": 6,
+  "Name": "clLogingTaskTimer",
+  "Id": "1b35e06a-9333-46e8-9668-ef5e089e92c5",
+  "Kind": "Class",
+  "BuildScope": "Application",
+  "Namespace": "",
+  "Folder": "lib-log-writer/log timing",
+  "ParentModule": "",
+  "ParentModuleId": "",
+  "AvailableInDesigner": false,
+  "CodeFile": "clLogingTaskTimer-1b35e06a.objobasic",
+  "LayoutFile": "",
+  "Notes": [],
+  "InspectorBehaviour": []
+}

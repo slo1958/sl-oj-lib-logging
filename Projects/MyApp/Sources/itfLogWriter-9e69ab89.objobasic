@@ -1,0 +1,4 @@
+Public Interface itfLogWriter
+
+    Sub AddLogEntry(MessageSeverity As string, MessageTime As string, MessageSource As string, MessageText As string)
+End Interface

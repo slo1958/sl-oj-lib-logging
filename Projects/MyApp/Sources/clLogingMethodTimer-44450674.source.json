@@ -1,0 +1,16 @@
+{
+  "Version": 6,
+  "Name": "clLogingMethodTimer",
+  "Id": "44450674-3728-4458-8db6-fed39bb688ed",
+  "Kind": "Class",
+  "BuildScope": "Application",
+  "Namespace": "",
+  "Folder": "lib-log-writer/log timing",
+  "ParentModule": "",
+  "ParentModuleId": "",
+  "AvailableInDesigner": false,
+  "CodeFile": "clLogingMethodTimer-44450674.objobasic",
+  "LayoutFile": "",
+  "Notes": [],
+  "InspectorBehaviour": []
+}

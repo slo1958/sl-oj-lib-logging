@@ -1,0 +1,16 @@
+{
+  "Version": 6,
+  "Name": "clDebugLogWriter",
+  "Id": "68ad91e5-1494-44d1-8220-35d794ad5186",
+  "Kind": "Class",
+  "BuildScope": "Application",
+  "Namespace": "",
+  "Folder": "lib-log-writer/log writers",
+  "ParentModule": "",
+  "ParentModuleId": "",
+  "AvailableInDesigner": false,
+  "CodeFile": "clDebugLogWriter-68ad91e5.objobasic",
+  "LayoutFile": "",
+  "Notes": [],
+  "InspectorBehaviour": []
+}

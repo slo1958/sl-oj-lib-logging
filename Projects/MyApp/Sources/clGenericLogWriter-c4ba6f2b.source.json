@@ -1,0 +1,16 @@
+{
+  "Version": 6,
+  "Name": "clGenericLogWriter",
+  "Id": "c4ba6f2b-4bc9-4066-92dd-26318daaec52",
+  "Kind": "Class",
+  "BuildScope": "Application",
+  "Namespace": "",
+  "Folder": "lib-log-writer",
+  "ParentModule": "",
+  "ParentModuleId": "",
+  "AvailableInDesigner": false,
+  "CodeFile": "clGenericLogWriter-c4ba6f2b.objobasic",
+  "LayoutFile": "",
+  "Notes": [],
+  "InspectorBehaviour": []
+}

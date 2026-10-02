@@ -1,0 +1,16 @@
+{
+  "Version": 6,
+  "Name": "clLogManager",
+  "Id": "59e09e10-31a9-404f-ae5b-a2891bee4ca5",
+  "Kind": "Class",
+  "BuildScope": "Application",
+  "Namespace": "",
+  "Folder": "lib-log-writer",
+  "ParentModule": "",
+  "ParentModuleId": "",
+  "AvailableInDesigner": false,
+  "CodeFile": "clLogManager-59e09e10.objobasic",
+  "LayoutFile": "",
+  "Notes": [],
+  "InspectorBehaviour": []
+}

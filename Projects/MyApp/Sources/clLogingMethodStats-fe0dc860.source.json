@@ -1,0 +1,16 @@
+{
+  "Version": 6,
+  "Name": "clLogingMethodStats",
+  "Id": "fe0dc860-3316-4b99-af0b-120102b23a94",
+  "Kind": "Class",
+  "BuildScope": "Application",
+  "Namespace": "",
+  "Folder": "lib-log-writer/log timing",
+  "ParentModule": "",
+  "ParentModuleId": "",
+  "AvailableInDesigner": false,
+  "CodeFile": "clLogingMethodStats-fe0dc860.objobasic",
+  "LayoutFile": "",
+  "Notes": [],
+  "InspectorBehaviour": []
+}

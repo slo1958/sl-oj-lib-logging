@@ -1,0 +1,16 @@
+{
+  "Version": 6,
+  "Name": "clLoginMessageEntry",
+  "Id": "425b5910-db00-41c8-86c8-3a1d382a3bb9",
+  "Kind": "Class",
+  "BuildScope": "Application",
+  "Namespace": "",
+  "Folder": "lib-log-writer/log messages",
+  "ParentModule": "",
+  "ParentModuleId": "",
+  "AvailableInDesigner": false,
+  "CodeFile": "clLoginMessageEntry-425b5910.objobasic",
+  "LayoutFile": "",
+  "Notes": [],
+  "InspectorBehaviour": []
+}

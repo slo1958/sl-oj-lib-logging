@@ -1,0 +1,8 @@
+Class Window1 Inherits Window
+
+    Event Opened()
+    Print("hello world")
+
+
+    End Event
+End Class

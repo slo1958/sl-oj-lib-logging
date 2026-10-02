@@ -1,0 +1,43 @@
+Public Class clGenericLogWriter Implements itfLogWriter
+
+    Private Property AcceptedSeverity As Dictionary
+    Public Function AcceptSeverity(MessageSeverity As string) As Boolean
+    return self.AcceptedSeverity.Value(MessageSeverity)
+    End Function
+  Public Const cstSeverityError As String = "ERR"
+  Public Const cstSeverityFatalError As String = "FE"
+  Public Const cstSeverityInformation As String = "INF"
+  Public Const cstSeverityMessage As String = "MSG"
+  Public Const cstSeverityStatistics As String = "STS"
+  Public Const cstSeverityWarning As String = "WNG"
+    Constructor()
+
+    Self.AcceptedSeverity = New Dictionary
+
+    Self.AcceptedSeverity.Value(cstSeverityFatalError) = True
+    Self.AcceptedSeverity.Value(cstSeverityError) = True
+    Self.AcceptedSeverity.Value(cstSeverityWarning) = True
+    Self.AcceptedSeverity.Value(cstSeverityInformation) = True
+    Self.AcceptedSeverity.Value(cstSeverityStatistics) = True
+    Self.AcceptedSeverity.Value(cstSeverityMessage) = True
+
+    Return
+
+    End Constructor
+    Public Sub AddLogEntry(MessageSeverity As string, MessageTime As string, MessageSource As string, MessageText As string)
+
+    Pragma unused MessageSeverity
+    Pragma unused MessageTime
+    Pragma unused MessageSource
+    Pragma unused MessageText
+
+    Throw New Exception("Unimplemented method " + CurrentMethodName())
+
+
+    End Sub
+    Public Sub UpdateSeverityFilter(SeverityLevel As string, AllowOutput As Boolean)
+
+    Self.AcceptedSeverity.Value(SeverityLevel) = AllowOutput
+
+    End Sub
+End Class

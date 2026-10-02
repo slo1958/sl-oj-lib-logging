@@ -1,0 +1,21 @@
+Public Class clLogingMethodStats
+
+    Public Constructor(totalCount As integer, totalDuration As Double)
+    Self.Count = totalCount
+    Self.Duration = totalDuration
+
+    Return
+
+    End Constructor
+    Public Property Count As integer
+    Public Property Duration As Double
+    Public Sub Average(double)
+    If Self.Count < 1 Then
+      Return 0
+    Else
+      Return Self.Duration / Self.Count
+
+    End If
+
+    End Sub
+End Class
