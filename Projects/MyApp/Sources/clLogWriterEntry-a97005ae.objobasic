@@ -1,4 +1,4 @@
-Public Class clLogWriterEntry
+Private Class clLogWriterEntry
 
     Public Property Identity As String
     Public Property Enabled As Boolean

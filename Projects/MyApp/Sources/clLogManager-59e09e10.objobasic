@@ -1,3 +1,632 @@
-Public Class clLogManager
+Public Class clLogManager Implements itfLogWriter
 
+    Public Sub AddWriter(prmWriterId as string, prmWriter as itfLogWriter)
+    #
+    # Add a log writer
+    #
+    # Parameters:
+    # - Identifier associated with writer
+    # - allocated log writer
+    #
+    # Returns:
+    # (nothing)
+    #
+
+    For Each tmp As  clLogWriterEntry In writers
+      If tmp.identity = prmWriterId Then
+        WriteError(cstMsgWriterAlreadyDefined, prmWriterId)
+        return
+
+      End If
+
+    Next
+
+    var tmp As New  clLogWriterEntry(prmWriterId, prmWriter)
+
+    writers.Append(tmp)
+
+    return
+    End Sub
+    Public Sub WriteError(MessageSource As string, MessageText As string, ParamArray MessageParameters As String)
+    #
+    # Write an error message
+    # The message may contain place holder %0, %1, ... replaced by corresponding parameters
+    # Error messages are fowarded to writers until the maximum error count is reached.
+    # The internal counter reflects the actual number of calls to WriteError()
+    #
+    # Parameters
+    # - Message template
+    # - List of parameters
+    #
+    # Returns:
+    # (nothing)
+    #
+
+    Self.error_counter = Self.error_counter + 1
+
+    If Self.error_counter > Self.error_limit Then
+      Return
+
+    ElseIf Self.error_counter = Self.error_limit Then
+      If ErrorLimitIsFatal Then
+        writeFatalError(MessageSource, cstMsgReachedErrorLimit, Self.error_limit.ToString())
+
+      Else
+        internal_WriteMessage(MessageSource, cstSeverityWarning, cstMsgErrorMsgDisabled)
+
+      End If
+
+    Else
+      internal_WriteMessage(MessageSource, cstSeverityError, internal_ProcessParameters(MessageText, MessageParameters))
+
+    End If
+
+    Return
+    End Sub
+    Public Property Writers() As clLogWriterEntry
+    Public Property error_counter As integer
+    Public Property error_limit As integer
+    Public Sub WriteFatalError(MessageSource As string, MessageText As string, ParamArray MessageParameters As string)
+    #
+    # Write a fatal error message
+    # The message may contain place holder %0, %1, ... replaced by corresponding parameters. Processing stops after sending the message to all writers.
+    #
+    # Parameters
+    # - Message template
+    # - List of parameters
+    #
+    # Returns:
+    # (nothing)
+    #
+
+    internal_WriteMessage(MessageSource, cstSeverityFatalError, internal_ProcessParameters(MessageText, MessageParameters))
+
+    System.Quit(-1)
+
+
+    End Sub
+    Public Function internal_ProcessParameters(MessageText As string, MessageParameters() As string) As string
+    # TODO: apply formatting
+
+    Var tmp_return As String = MessageText
+
+    For i As Integer = 0 To MessageParameters.LastIndex
+      Var formattedParam As String
+
+      formattedParam = MessageParameters[i]
+      # Variant not supported 
+      # Select Case MessageParameters(i).Type
+
+      # Case Variant.TypeDouble
+      # formattedParam = str(MessageParameters(i).DoubleValue, Self.FormatForNumberParam)
+
+      # Case Variant.TypeDateTime
+      # formattedParam = MessageParameters(i).DateTimeValue.SQLDateTime
+
+      # Else
+      # formattedParam = MessageParameters(i)
+
+      # End Select
+
+      tmp_return = tmp_return.Replace("%" + i.ToString(), formattedParam)
+
+    Next
+
+    Return tmp_return
+
+    End Function
+    Public Sub internal_WriteMessage(MessageSource As string, MessageSeverity As string, MessageText As string)
+    #
+    # If the severity of the message is globally authorized, forward the message to each active writer
+    #
+    # Severity can also be filtered individually at the level of each writer
+    #
+
+    If Self.AcceptedSeverity.Value(MessageSeverity) Then
+
+      Var TimeStamp As String = DateTime.Now.ToSQLDateTime()
+
+      For Each Writer As clLogWriterEntry In writers
+        If Writer.Enabled Then
+          Writer.logWriter.AddLogEntry(MessageSeverity, TimeStamp, MessageSource, MessageText)
+
+        End If
+
+      Next
+
+    End If
+
+    Return
+
+    End Sub
+    Public Property AcceptedSeverity As dictionary
+    Constructor()
+
+    Self.RunningTasks = New Dictionary
+    Self.TrackedMethods = New Dictionary
+
+    AddWriter(cstInternalWriterId, Self)
+
+    Self.error_limit = 50
+    self.warning_limit = 50
+
+    Self.ErrorLimitIsFatal = False
+    Self.SendInfoMessageOnWarningReset = False
+    Self.SendInfoMessageOnErrorReset = True
+
+    # Self.FormatForNumberParam = cDefaultFormatNumberParam
+
+    Self.FormatForExecutionTime = cDefaultFormatExecutionTime
+
+    Self.AcceptedSeverity = New Dictionary
+
+    Self.AcceptedSeverity.Value(cstSeverityFatalError) = True
+    Self.AcceptedSeverity.Value(cstSeverityError) = True
+    Self.AcceptedSeverity.Value(cstSeverityWarning) = True
+    Self.AcceptedSeverity.Value(cstSeverityMessage) = True
+    Self.AcceptedSeverity.Value(cstSeverityInformation) = True
+    Self.AcceptedSeverity.Value(cstSeverityStatistics) = True
+
+    Return
+
+    End Constructor
+    Public Property ErrorLimitIsFatal As boolean
+    Public Property SendInfoMessageOnWarningReset As boolean
+    Public Property RunningTasks As Dictionary
+    Public Property TrackedMethods As Dictionary
+    Public Sub AddLogEntry(MessageSeverity As string, MessageTime As string, MessageSource As string, MessageText As string)
+    #
+    # Internal logWriter
+    #
+
+    If MessageSource.Length > 0 Then
+      Print(MessageTime + ". " + MessageSeverity + " " + MessageText + " from " + MessageSource)
+
+    Else
+      Print(MessageTime + ". " + MessageSeverity + " " + MessageText)
+
+    End If
+    End Sub
+    Public Sub ClearAllMethods()
+    #
+    # Clear all methods from execution tracking
+    #
+    # Parameters:
+    # (nothing)
+    #
+    # Returns:
+    # (nothing)
+    #
+
+    Self.TrackedMethods = New Dictionary
+
+    End Sub
+    Public Property warning_limit As integer
+    Public Property SendInfoMessageOnErrorReset As boolean
+    Public Sub WriteInfo(MessageSource As string, MessageText As string, ParamArray MessageParameters As String)
+    #
+    # Write an information message
+    # The message may contain place holder %0, %1, ... replaced by corresponding parameters
+    #
+    # Parameters
+    # - Message template
+    # - List of parameters
+    #
+    # Returns:
+    # (nothing)
+    #
+
+    internal_WriteMessage(MessageSource, cstSeverityInformation, internal_ProcessParameters(MessageText, MessageParameters))
+
+    Return
+
+    End Sub
+    Public Sub WriteMessage(MessageSource As string, MessageText As string, ParamArray MessageParameters As String)
+    #
+    # Write an information message
+    # The message may contain place holder %0, %1, ... replaced by corresponding parameters
+    #
+    # Parameters
+    # - Message template
+    # - List of parameters
+    #
+    # Returns:
+    # (nothing)
+    #
+
+    internal_WriteMessage(MessageSource, cstSeverityInformation, internal_ProcessParameters(MessageText, MessageParameters))
+
+    Return
+
+    End Sub
+    Public Sub WriteStatistics(MessageText As string, ParamArray MessageParameters As string)
+    #
+    # Write an information message
+    # The message may contain place holder %0, %1, ... replaced by corresponding parameters
+    #
+    # Parameters
+    # - Message template
+    # - List of parameters
+    #
+    # Returns:
+    # (nothing)
+    #
+
+    internal_WriteMessage (cstInternalSource, cstSeverityStatistics, internal_ProcessParameters(MessageText, MessageParameters))
+
+    Return
+
+    End Sub
+    Public Sub WriteSummary()
+    #
+    # Send the number of calls to WriteWarning and WriteError as  an information message
+    #
+    # Parameters:
+    # (nothing)
+    #
+    # Returns:
+    # (nothing)
+    #
+
+    Self.WriteInfo(cstInternalSource, cstMsgStatusMessage, warning_counter.toString(), error_counter.toString())
+
+    Return
+
+    End Sub
+    Public Sub WriteWarning(MessageSource As string, MessageText As string, ParamArray MessageParameters As String)
+    #
+    # Write an warning message
+    # The message may contain place holder %0, %1, ... replaced by corresponding parameters
+    # Warning messages are fowarded to writers until the maximum warning count is reached.
+    # The internal counter reflects the actual number of calls to WriteWarning()
+    #
+    # Parameters
+    # - Message template
+    # - List of parameters
+    #
+    # Returns:
+    # (nothing)
+    #
+    Self.warning_counter = Self.warning_counter + 1
+
+    If Self.warning_counter > Self.warning_limit Then
+      Return
+
+    ElseIf Self.warning_counter = Self.warning_limit Then
+      internal_WriteMessage(MessageSource, cstSeverityWarning, cstMsgWarningMsgDisabled)
+
+
+    Else
+      internal_WriteMessage(MessageSource, cstSeverityWarning, internal_ProcessParameters(MessageText, MessageParameters))
+
+    End If
+
+    Return
+
+    End Sub
+    Public Property warning_counter As integer
+    Public Sub DisableWriter(Optional prmWriterID As string = cstinternalWriterId)
+    #
+    # Disable a specific writers
+    # 
+    # Parameters:
+    # - Identifier of the writer to be disabled
+    #
+    # Returns:
+    # (nothing)
+    #
+    For Each tmp As clLogWriterEntry In writers
+      If tmp.Identity = prmWriterId Then
+        tmp.Enabled = False
+        Return
+
+      End If
+
+    Next
+
+    WriteError(cstMsgWriterNotFound, prmWriterId)
+
+    Return
+
+
+
+    End Sub
+    Public Sub EnableWriter(Optional prmWriterID As string = cstinternalWriterId)
+    #
+    # Disable a specific writers
+    # 
+    # Parameters:
+    # - Identifier of the writer to be disabled
+    #
+    # Returns:
+    # (nothing)
+    #
+    For Each tmp As clLogWriterEntry In writers
+      If tmp.Identity = prmWriterId Then
+        tmp.Enabled = True
+        Return
+
+      End If
+
+    Next
+
+    WriteError(cstMsgWriterNotFound, prmWriterId)
+
+    Return
+
+
+
+    End Sub
+    Public Sub EndTask(prmTaskID As string)
+    #
+    # Register the end of a task. This causes a message to be send to the writers, with execution time.
+    #
+    # Parameters:
+    # - name of the task
+    #
+    # Returns:
+    # (nothing)
+    #
+    Var tmp As clLogingTaskTimer = clLogingTaskTimer(RunningTasks.Lookup(prmTaskID, Nothing))
+
+    If tmp = Nothing Then
+      WriteError(cstInternalSource, cstMsgTaskNotFound, prmTaskID, CurrentMethodName())
+
+    Else
+      tmp.Done()
+
+      RunningTasks.Remove(prmTaskId)
+
+      WriteInfo(cstInternalSource, cstMsgEndTask, prmTaskID, tmp.GetExecutionTime().ToString(formatForExecutionTime))
+
+    End If
+
+    End Sub
+    Public Property FormatForExecutionTime As String
+    Public Sub EndTaskAll()
+    #
+    # End all registered tasks
+    #
+    # Parameters:
+    # (nothing)
+    #
+    # Returns:
+    # (nothing)
+    #
+
+    Var key_store() As String
+
+    # cannot alter a Dictionary while iterating, so take a copy of the keys
+    For Each item As String In RunningTasks.Keys
+      key_store.Append(item)
+
+    Next
+
+    For Each task_id As String In key_store
+      EndTask(task_id)
+
+    Next
+
+    Return
+    End Sub
+    Public Sub EnterMethod(MethodName As string)
+    #
+    # Register entry in a method
+    #
+    # Parameters:
+    # - name of the method
+    #
+    # Returns:
+    # (nothing)
+    #
+    Var methodInfo As clLogingMethodTimer = Self.TrackedMethods.Lookup(MethodName, Nothing)
+
+    If methodInfo = Nothing Then
+      methodInfo = New clLogingMethodTimer(MethodName)
+      Self.TrackedMethods.Value(MethodName) = methodInfo
+
+    End If
+
+    methodInfo.EnterMethod()
+
+    Return
+
+    End Sub
+    Public Sub ExitMethod(MethodName As string)
+    #
+    # Register exit from a method
+    #
+    # Parameters:
+    # - name of the method
+    #
+    # Returns:
+    # (nothing)
+    #
+    Var methodInfo As clLogingMethodTimer = Self.TrackedMethods.Lookup(MethodName, Nothing)
+
+    If methodInfo <> Nothing Then methodInfo.ExitMethod()
+
+    Return
+
+    End Sub
+    Public Function GetProcessedMessage(MessageText As string, MessageParameters() As string) As string
+
+    Return Self.internal_ProcessParameters(MessageText, MessageParameters)
+
+    End Function
+    Public Sub MethodStats(MethodName As string)
+    #
+    # Send method execution statistics to the registered writers
+    #
+    # Parameters:
+    # - name of the method
+    #
+    # Returns:
+    # (nothing)
+    #
+    Var methodInfo As clLogingMethodTimer = Self.TrackedMethods.Lookup(MethodName, Nothing)
+
+    If methodInfo <> Nothing Then
+      Var p As clLogingMethodStats = methodInfo.MethodStats()
+
+      # Var count As Integer = p.Left
+      # Var tottime As Double = p.Duration
+      # Var itertime As Double = If(count <= 0, 0, tottime / count)
+
+      WriteStatistics(cstMsgMethodStats, MethodName, p.Count.ToString(), p.Duration.ToString(FormatForExecutionTime), p.Average().ToString(FormatForExecutionTime))
+
+    Else
+
+    End If
+
+
+
+    End Sub
+    Public Sub MethodStatsAll()
+    #
+    # Send all method execution statistics to the registered writers
+    #
+    # Parameters:
+    # (nothing)
+    #
+    # Returns:
+    # (nothing)
+    #
+    For Each method As String In Self.TrackedMethods.Keys
+      Self.MethodStats(method)
+
+    Next
+
+    Return
+
+    End Sub
+    Public Sub ResetErrorCounter()
+    #
+    # Reset the error counter
+    #
+    # Parameters
+    # (nothing)
+    # 
+    # Returns
+    # (nothing)
+    #
+    Self.error_counter = 0
+
+    If SendInfoMessageOnErrorReset Then
+      WriteInfo (cstInternalSource, cstMsgResetErrorCounter)
+
+    End If
+
+    End Sub
+    Public Sub ResetWarningCounter()
+    #
+    # Reset the warning counter
+    #
+    # Parameters
+    # (nothing)
+    # 
+    # Returns
+    # (nothing)
+    #
+    Self.warning_counter = 0
+
+    If SendInfoMessageOnWarningReset Then
+      WriteInfo (cstInternalSource, cstMsgResetWarningCounter)
+
+    End If
+
+    End Sub
+    Public Sub ResetWriters()
+    #
+    # Remove all writers
+    # Restore the default writer
+    #
+
+    Self.Writers.Clear()
+
+    Self.AddWriter(cstInternalWriterId, Self)
+
+    Return
+    End Sub
+    Public Sub SetErrorLimit(NewLimit As integer)
+    #
+    # Update the error limit. The error lmit is the maximum number of error messages since the last reset that
+    # will be forwarded to the writers.
+    #
+    # Parameters:
+    # - new error limit
+    #
+    # Returns:
+    # (nothing)
+    #
+    Self.error_limit = NewLimit
+
+    WriteInfo(cstInternalSource, cstMsgSetErrorLimit, NewLimit.ToString())
+
+    Return
+
+    End Sub
+    Public Sub SetWarningLimit(NewLimit As integer)
+    #
+    # Update the warning limit. The warning limit is the maximum number of warning messages since the last reset that
+    # will be forwarded to the writers.
+    #
+    # Parameters:
+    # - new warning limit
+    #
+    # Returns:
+    # (nothing)
+    #
+
+    Self.warning_limit = NewLimit
+
+    WriteInfo(cstInternalSource, cstMsgSetWarningLimit, Self.warning_limit.ToString())
+
+    Return
+
+    End Sub
+    Public Sub StartTask(prmTaskId As String)
+    #
+    # Register the start of a task. This causes a message to be send to the writers.
+    #
+    # Parameters:
+    # - name of the task
+    #
+    # Returns:
+    # (nothing)
+    #
+    Var tmp As New clLogingTaskTimer(prmTaskId)
+    RunningTasks.Value(prmTaskId) = tmp
+
+    WriteInfo(cstInternalSource, cstMsgStartTask, prmTaskId)
+
+    Return
+
+    End Sub
+    Public Sub UpdateSeverityFilter(SeverityLevel As string, AllowOutput As Boolean)
+    #
+    # Update the severity filter on severity level
+    # This filter is applied before forwarding messages to all writers
+    # This is a global filter. Each individual writer may also support a filtering mechanism.
+    #
+    # Parameters:
+    # - severity level 
+    # - enabled/ disable forwarding message of the given severity to the writers
+    #
+    # Returns:
+    # (nothing)
+    #
+    Self.AcceptedSeverity.Value(SeverityLevel) = AllowOutput
+
+    End Sub
+    Private Shared Property DefaultLogManager As clLogManager = Nothing
+    Public Shared Function GetDefaultLogingSupport() As clLogManager
+    If DefaultLogManager = Nothing Then
+      DefaultLogManager = New clLogManager
+
+    End If
+
+    Return DefaultLogManager
+
+    End Function
 End Class
