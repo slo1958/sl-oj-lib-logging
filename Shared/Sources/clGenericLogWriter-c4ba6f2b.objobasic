@@ -2,7 +2,16 @@ Public Class clGenericLogWriter Implements lib_LogManager.itfLogWriter
 
     Private Property AcceptedSeverity As Dictionary
     Public Function AcceptSeverity(MessageSeverity As string) As Boolean
-    return self.AcceptedSeverity.Value(MessageSeverity)
+
+    Try
+      Return Self.AcceptedSeverity.Value(MessageSeverity)
+
+    Catch e As Exception
+      Print("Error: " + e.Message)
+      Return False
+
+    End Try
+
     End Function
   Public Const cstSeverityError As String = "ERR"
   Public Const cstSeverityFatalError As String = "FE"
