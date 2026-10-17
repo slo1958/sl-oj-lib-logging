@@ -2,7 +2,7 @@
   "Version": 6,
   "Id": "3590fcf9-bc35-4574-8d73-835e96aa6f8f",
   "Name": "sl-oj-lib-logs",
-  "LastSavedStudioVersion": "26.9.4",
+  "LastSavedStudioVersion": "26.10.1",
   "ActiveProject": "MyApp",
   "ApplicationProjectId": "",
   "Projects": [
@@ -13,6 +13,9 @@
       "Type": "Desktop"
     }
   ],
-  "EmptyFolders": [],
+  "EmptyFolders": [
+    "sl-lib-logs",
+    "sl-lib-logs/logWriters"
+  ],
   "AiCustomInstructions": ""
 }

@@ -1,4 +1,4 @@
-Public Class clGenericLogWriter Implements itfLogWriter
+Public Class clGenericLogWriter Implements lib_LogManager.itfLogWriter
 
     Private Property AcceptedSeverity As Dictionary
     Public Function AcceptSeverity(MessageSeverity As string) As Boolean

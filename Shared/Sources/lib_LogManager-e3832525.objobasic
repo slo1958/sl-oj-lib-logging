@@ -1,6 +1,5 @@
 Public Module lib_LogManager
 
-Public Const MY_CONSTANT As String = "abc"
 Private Const cDefaultFormatExecutionTime as String =" ###,###.000"
 Private Const cDefaultFormatNumberParam as String =" -####0.000##"
 Private Const cstInternalSource as String =" Internal"

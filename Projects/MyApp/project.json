@@ -79,8 +79,5 @@
     "DefaultLocale": "en-GB",
     "SupportedLocales": []
   },
-  "EmptyFolders": [
-    "lib-loging",
-    "lib-loging/lib-log-writer"
-  ]
+  "EmptyFolders": []
 }
