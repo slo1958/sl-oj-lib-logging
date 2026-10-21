@@ -1,0 +1,16 @@
+{
+  "Version": 6,
+  "Name": "clSomethingElse0",
+  "Id": "2a92d0d4-02c3-4d9d-99e1-06a8198825bd",
+  "Kind": "Class",
+  "BuildScope": "Application",
+  "Namespace": "",
+  "Folder": "sl-another-lib",
+  "ParentModule": "",
+  "ParentModuleId": "",
+  "AvailableInDesigner": false,
+  "CodeFile": "clSomethingElse0-2a92d0d4.objobasic",
+  "LayoutFile": "",
+  "Notes": [],
+  "InspectorBehaviour": []
+}

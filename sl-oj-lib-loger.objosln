@@ -14,6 +14,7 @@
     }
   ],
   "EmptyFolders": [
+    "sl-another-lib",
     "sl-lib-logs",
     "sl-lib-logs/logWriters"
   ],
