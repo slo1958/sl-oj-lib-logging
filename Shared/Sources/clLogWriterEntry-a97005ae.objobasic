@@ -15,7 +15,7 @@ Private Class clLogWriterEntry
     Return
 
     End Constructor
-    Private Property AcceptedSeverity As clLogingSeverityFilter
+    Private Property AcceptedSeverity As Internals.clLogingSeverityFilter
     Public Sub UpdateSeverityFilter(SeverityLevel As string, AllowOutput As Boolean)
 
     Self.AcceptedSeverity.UpdateSeverityFilter(SeverityLevel, AllowOutput)

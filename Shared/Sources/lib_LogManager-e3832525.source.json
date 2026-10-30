@@ -5,7 +5,7 @@
   "Kind": "Module",
   "BuildScope": "Application",
   "Namespace": "",
-  "Folder": "sl-lib-logs",
+  "Folder": "sl-lib-logging",
   "ParentModule": "",
   "ParentModuleId": "",
   "AvailableInDesigner": false,

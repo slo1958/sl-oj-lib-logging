@@ -5,7 +5,7 @@
   "Kind": "Class",
   "BuildScope": "Application",
   "Namespace": "",
-  "Folder": "sl-lib-logs",
+  "Folder": "sl-lib-logging",
   "ParentModule": "lib_LogManager",
   "ParentModuleId": "e3832525-499e-4d7f-90e7-ed3db6338a38",
   "AvailableInDesigner": false,
