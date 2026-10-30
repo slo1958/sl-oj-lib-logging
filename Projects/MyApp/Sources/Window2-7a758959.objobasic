@@ -1,0 +1,130 @@
+Public Class Window2 Inherits Window
+
+    Event Opening()
+
+    PopupMenu1.SelectedRowIndex = 0
+    # ShowText(basetext())
+    End Event
+    Public Sub ShowText(s() As string)
+
+    Textarea1.Text = s.Join(EndOfLine.Native)
+
+    End Sub
+    Public Function BaseText() As string()
+    Var s() As String
+
+    s.Append("clLogManager")
+    s.Append("")
+    s.Append("This library provides a class to handle log messages.")
+    s.Append("Messages are writing to an output support by individual logWriter(s).")
+    s.Append("A logWriter is something implementing the itfLogWriter interface, which consists of one method.")
+    s.Append("")
+    s.Append("The logManager can handle multiple logWriters.")
+    s.Append("A global filter on the severity of message is applied before calling each writers.")
+    s.Append("Each writer has its own filter on severity.")
+    s.Append("So, it is perferctly possible to forward all messages of a given severity to a specific writer.")
+    s.Append("")
+    s.Append("The solution contains an example of implementing a logWriter based on the Listbox")
+    s.Append("")
+    s.Append("Each logWriter can be enabled using EnableLogWriter(logwriterID)and disabled using DisableLogWriter(logWriterID) individually.")
+    s.Append("")
+    s.Append("logWriterID is a string choosen by the user to uniquely identify the added logWriter.")
+    s.Append("")
+    s.Append("DebugLogWriter: writes the message to the Output window. A DebugLogWriter is automatically added")
+    s.Append("The default logWriter cannot be removed but can be disabled using DisableLogWriter() without parameters.")
+    s.Append("")
+    Return s
+
+    End Function
+    Public Function MessagingText() As string()
+    Var s() As String
+
+    s.Append("clLogManager")
+    s.Append("")
+    s.Append("Each writer can be enabled and disabled individually.")
+    s.Append("")
+    s.Append("The logManager reports warnings until the maximum warning count is reached. After that, no more warnings are reported.")
+    s.Append("")
+    s.Append("The logManager reports errors until the maximum error count is reached. A parameter can be set to cause a fatal error when the limit is reached.")
+    s.Append("")
+    s.Append("A message with severity == fatal error is properly forwarded to the writers, then the logManager forces the app to quit.")
+
+
+    Return s
+
+    End Function
+    Sub PopupMenu1_SelectionChanged()
+
+    Select Case Me.SelectedRowIndex
+
+      Case 0
+        ShowText(BaseText())
+
+      Case 1
+        ShowText(MessagingText())
+
+      Case 2
+        ShowText(TracingText())
+
+      Case 3
+        ShowText(Example1())
+
+
+    End Select
+
+    End Sub
+    Public Function TracingText() As string()
+    Var s() As String
+
+    s.Append("clLogManager")
+    s.Append("")
+    s.Append("The logManager provide two sets of methods to trace execution.")
+    s.Append("")
+    s.Append("EnterMethod() and ExitMethod() are used to tracing the number of calls and the time spent in a method.")
+    s.Append("WriteMethodStats() is used to get the statistics about one method and WriteMethodStatsAll() write the statistics about all methods")
+    s.Append("")
+    s.Append("StarTask(), EndTask() and EndAllTask() are used to trace the time spent for specific tasks.")
+    s.append("The statistics are automatically written when EndTask() is called.")
+    s.Append("")
+    s.Append("A message with severity == fatal error is properly forwarded to the writers, then the logManager forces the app to quit.")
+
+    Return s
+
+    End Function
+    Public Function Example1() As string()
+    Var s() As String
+
+
+    s.Append("clLogManager")
+    s.Append("")
+    s.Append("Example code")
+    s.Append("")
+    s.Append("Define a property named log defined with type lib_LogManager.clLogManager")
+    s.Append("")
+    s.Append("In the opening event, add the following statement to initialize a defaut logManager:")
+    s.Append("")
+    s.Append("Self.log = lib_LogManager.clLogManager.GetDefaultLogingSupport()")
+    s.Append("")
+    s.Append("Then add the two listboxes implementing the itfLogWriter interface")
+    s.Append("")
+    s.Append("Self.log.AddWriter(\"LB01\", Listbox1) ")
+    s.Append("Self.log.AddWriter(\"LB02\", Listbox2) ")
+    s.Append("")
+    s.Append("Note that LB01 is the ID of the first writer, LB02 is the ID of the second writer.")
+    s.Append("")
+    s.Append("For example, to disable the message with severity == warning  (cstSeverityWarning) for LB01:")
+    s.Append("")
+    s.Append("log.UpdateWriterSeverityFilter(\"LB01\", lib_LogManager.cstSeverityWarning, false)")
+    s.Append("")
+    s.Append("If one wants to disable the message with severity == information (cstSeverityInformation) in all writers:")
+    s.Append("")
+    s.Append("log.UpdateSeverityFilter(lib_LogManager.cstSeverityInformation, false)")
+    s.Append("")
+    s.Append("The later does NOT affect the filters of individual writers")
+    s.Append("")
+    Return s
+
+
+
+    End Function
+End Class

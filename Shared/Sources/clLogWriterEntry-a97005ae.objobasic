@@ -9,5 +9,27 @@ Private Class clLogWriterEntry
     Self.Enabled = True
     Self.logWriter = Writer
 
+
+    Self.AcceptedSeverity = New clLogingSeverityFilter
+
+    Return
+
     End Constructor
+    Private Property AcceptedSeverity As clLogingSeverityFilter
+    Public Sub UpdateSeverityFilter(SeverityLevel As string, AllowOutput As Boolean)
+
+    Self.AcceptedSeverity.UpdateSeverityFilter(SeverityLevel, AllowOutput)
+    End Sub
+    Public Function AcceptSeverity(MessageSeverity As string) As Boolean
+
+    Try
+      Return Self.AcceptedSeverity.AcceptSeverity(MessageSeverity)
+
+    Catch e As Exception
+      Print("Error: " + e.Message)
+      Return False
+
+    End Try
+
+    End Function
 End Class

@@ -35,7 +35,7 @@ Private Class clLogingMethodTimer
 
     Next
 
-    Return New clLogingMethodStats(count, totexecution)
+    Return New clLogingMethodStats(MethodName, count, totexecution)
 
     End Function
 End Class

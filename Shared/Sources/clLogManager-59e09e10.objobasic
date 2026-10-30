@@ -1,6 +1,6 @@
 Public Class clLogManager Implements itfLogWriter
 
-    Public Sub AddWriter(prmWriterId as string, prmWriter as itfLogWriter)
+    Public Sub AddWriter(prmWriterId As string, prmWriter As itfLogWriter, Optional InformWriters As boolean = True)
     #
     # Add a log writer
     #
@@ -14,16 +14,20 @@ Public Class clLogManager Implements itfLogWriter
 
     For Each tmp As  clLogWriterEntry In writers
       If tmp.identity = prmWriterId Then
-        WriteError(cstMsgWriterAlreadyDefined, prmWriterId)
+        WriteError(cstInternalSource,cstMsgWriterAlreadyDefined, prmWriterId)
         return
 
       End If
 
     Next
 
-    var tmp As New  clLogWriterEntry(prmWriterId, prmWriter)
 
+    Var tmp As New clLogWriterEntry(prmWriterId, prmWriter)
     writers.Append(tmp)
+
+    If InformWriters Then
+      WriteMessage(cstInternalSource, cstMsgAddingWriter, prmWriterId)
+    End If
 
     return
     End Sub
@@ -90,6 +94,8 @@ Public Class clLogManager Implements itfLogWriter
 
     Var tmp_return As String = MessageText
 
+    If MessageParameters.IsEmpty() Then Return tmp_return
+
     For i As Integer = 0 To MessageParameters.LastIndex
       Var formattedParam As String
 
@@ -115,19 +121,19 @@ Public Class clLogManager Implements itfLogWriter
     Return tmp_return
 
     End Function
-    Public Sub internal_WriteMessage(MessageSource As string, MessageSeverity As string, MessageText As string)
+    Private Sub internal_WriteMessage(MessageSource As string, MessageSeverity As string, MessageText As string)
     #
     # If the severity of the message is globally authorized, forward the message to each active writer
     #
     # Severity can also be filtered individually at the level of each writer
     #
 
-    If Self.AcceptedSeverity.Value(MessageSeverity) Then
+    If Self.AcceptedSeverity.AcceptSeverity(MessageSeverity) Then
 
       Var TimeStamp As String = DateTime.Now.ToSQLDateTime()
 
       For Each Writer As clLogWriterEntry In writers
-        If Writer.Enabled Then
+        If Writer.Enabled And Writer.AcceptSeverity(MessageSeverity) Then
           Writer.logWriter.AddLogEntry(MessageSeverity, TimeStamp, MessageSource, MessageText)
 
         End If
@@ -139,13 +145,12 @@ Public Class clLogManager Implements itfLogWriter
     Return
 
     End Sub
-    Public Property AcceptedSeverity As dictionary
     Constructor()
 
     Self.RunningTasks = New Dictionary
     Self.TrackedMethods = New Dictionary
 
-    AddWriter(cstInternalWriterId, Self)
+    AddWriter(cstInternalWriterId, Self, false)
 
     Self.error_limit = 50
     self.warning_limit = 50
@@ -158,14 +163,7 @@ Public Class clLogManager Implements itfLogWriter
 
     Self.FormatForExecutionTime = cDefaultFormatExecutionTime
 
-    Self.AcceptedSeverity = New Dictionary
-
-    Self.AcceptedSeverity.Value(cstSeverityFatalError) = True
-    Self.AcceptedSeverity.Value(cstSeverityError) = True
-    Self.AcceptedSeverity.Value(cstSeverityWarning) = True
-    Self.AcceptedSeverity.Value(cstSeverityMessage) = True
-    Self.AcceptedSeverity.Value(cstSeverityInformation) = True
-    Self.AcceptedSeverity.Value(cstSeverityStatistics) = True
+    Self.AcceptedSeverity = New clLogingSeverityFilter
 
     Return
 
@@ -239,6 +237,7 @@ Public Class clLogManager Implements itfLogWriter
     Return
 
     End Sub
+    ## An information message with a "Statistics" severity
     Public Sub WriteStatistics(MessageText As string, ParamArray MessageParameters As string)
     #
     # Write an information message
@@ -257,6 +256,7 @@ Public Class clLogManager Implements itfLogWriter
     Return
 
     End Sub
+    ## Report numbers of warnings anf errors
     Public Sub WriteSummary()
     #
     # Send the number of calls to WriteWarning and WriteError as  an information message
@@ -268,7 +268,12 @@ Public Class clLogManager Implements itfLogWriter
     # (nothing)
     #
 
-    Self.WriteInfo(cstInternalSource, cstMsgStatusMessage, warning_counter.toString(), error_counter.toString())
+    Var s() As String
+    s.Append(warning_counter.ToString())
+    s.Append(error_counter.ToString())
+
+    internal_WriteMessage(cstInternalSource, cstSeveritySummary, internal_ProcessParameters(cstMsgStatusMessage, s))
+
 
     Return
 
@@ -315,16 +320,17 @@ Public Class clLogManager Implements itfLogWriter
     # Returns:
     # (nothing)
     #
-    For Each tmp As clLogWriterEntry In writers
-      If tmp.Identity = prmWriterId Then
-        tmp.Enabled = False
-        Return
 
-      End If
+    Var writer As clLogWriterEntry = Self.FindWriter(prmWriterId)
 
-    Next
+    If writer = Nothing Then
+      WriteError(cstMsgWriterNotFound, prmWriterId)
+      Return
 
-    WriteError(cstMsgWriterNotFound, prmWriterId)
+    End If
+
+    WriteMessage(cstInternalSource, cstMsgDisableWriter, prmWriterID)
+    writer.Enabled = False
 
     Return
 
@@ -341,19 +347,19 @@ Public Class clLogManager Implements itfLogWriter
     # Returns:
     # (nothing)
     #
-    For Each tmp As clLogWriterEntry In writers
-      If tmp.Identity = prmWriterId Then
-        tmp.Enabled = True
-        Return
 
-      End If
+    Var writer As clLogWriterEntry = Self.FindWriter(prmWriterId)
 
-    Next
+    If writer = Nothing Then
+      WriteError(cstMsgWriterNotFound, prmWriterId)
+      Return
 
-    WriteError(cstMsgWriterNotFound, prmWriterId)
+    End If
+
+    writer.Enabled = True
+    WriteMessage(cstInternalSource, cstMsgEnableWriter, prmWriterID)
 
     Return
-
 
 
     End Sub
@@ -409,7 +415,7 @@ Public Class clLogManager Implements itfLogWriter
 
     Return
     End Sub
-    Public Sub EnterMethod(MethodName As string)
+    Public Sub EnterMethod(prmMethodName As string)
     #
     # Register entry in a method
     #
@@ -419,11 +425,11 @@ Public Class clLogManager Implements itfLogWriter
     # Returns:
     # (nothing)
     #
-    Var methodInfo As clLogingMethodTimer = Self.TrackedMethods.Lookup(MethodName, Nothing)
+    Var methodInfo As clLogingMethodTimer = Self.TrackedMethods.Lookup(prmMethodName, Nothing)
 
     If methodInfo = Nothing Then
-      methodInfo = New clLogingMethodTimer(MethodName)
-      Self.TrackedMethods.Value(MethodName) = methodInfo
+      methodInfo = New clLogingMethodTimer(prmMethodName)
+      Self.TrackedMethods.Value(prmMethodName) = methodInfo
 
     End If
 
@@ -432,7 +438,7 @@ Public Class clLogManager Implements itfLogWriter
     Return
 
     End Sub
-    Public Sub ExitMethod(MethodName As string)
+    Public Sub ExitMethod(prmMethodName As string)
     #
     # Register exit from a method
     #
@@ -442,7 +448,7 @@ Public Class clLogManager Implements itfLogWriter
     # Returns:
     # (nothing)
     #
-    Var methodInfo As clLogingMethodTimer = Self.TrackedMethods.Lookup(MethodName, Nothing)
+    Var methodInfo As clLogingMethodTimer = Self.TrackedMethods.Lookup(prmMethodName, Nothing)
 
     If methodInfo <> Nothing Then methodInfo.ExitMethod()
 
@@ -454,7 +460,7 @@ Public Class clLogManager Implements itfLogWriter
     Return Self.internal_ProcessParameters(MessageText, MessageParameters)
 
     End Function
-    Public Sub MethodStats(MethodName As string)
+    Public Sub WriteMethodStats(prmMethodName As string)
     #
     # Send method execution statistics to the registered writers
     #
@@ -464,7 +470,7 @@ Public Class clLogManager Implements itfLogWriter
     # Returns:
     # (nothing)
     #
-    Var methodInfo As clLogingMethodTimer = Self.TrackedMethods.Lookup(MethodName, Nothing)
+    Var methodInfo As clLogingMethodTimer = Self.TrackedMethods.Lookup(prmMethodName, Nothing)
 
     If methodInfo <> Nothing Then
       Var p As clLogingMethodStats = methodInfo.MethodStats()
@@ -473,7 +479,7 @@ Public Class clLogManager Implements itfLogWriter
       # Var tottime As Double = p.Duration
       # Var itertime As Double = If(count <= 0, 0, tottime / count)
 
-      WriteStatistics(cstMsgMethodStats, MethodName, p.Count.ToString(), p.Duration.ToString(FormatForExecutionTime), p.Average().ToString(FormatForExecutionTime))
+      WriteStatistics(cstMsgMethodStats, prmMethodName, p.Count.ToString(), p.Duration.ToString(FormatForExecutionTime), p.Average().ToString(FormatForExecutionTime))
 
     Else
 
@@ -482,7 +488,7 @@ Public Class clLogManager Implements itfLogWriter
 
 
     End Sub
-    Public Sub MethodStatsAll()
+    Public Sub WriteMethodStatsAll()
     #
     # Send all method execution statistics to the registered writers
     #
@@ -493,7 +499,7 @@ Public Class clLogManager Implements itfLogWriter
     # (nothing)
     #
     For Each method As String In Self.TrackedMethods.Keys
-      Self.MethodStats(method)
+      Self.WriteMethodStats(method)
 
     Next
 
@@ -616,7 +622,7 @@ Public Class clLogManager Implements itfLogWriter
     # Returns:
     # (nothing)
     #
-    Self.AcceptedSeverity.Value(SeverityLevel) = AllowOutput
+    Self.AcceptedSeverity.UpdateSeverityFilter(SeverityLevel, AllowOutput)
 
     End Sub
     Private Shared Property DefaultLogManager As clLogManager = Nothing
@@ -627,6 +633,87 @@ Public Class clLogManager Implements itfLogWriter
     End If
 
     Return DefaultLogManager
+
+    End Function
+    Public Sub UpdateWriterSeverityFilter(prmWriterId As string, SeverityLevel As string, AllowOutput As Boolean)
+    #
+    # Update the severity filter on severity level for a given writer
+    #
+    # Parameters:
+    # - Identifier of the writer to be updated
+    # - severity level 
+    # - enabled/ disable forwarding message of the given severity to the writers
+    #
+    # Returns:
+    # (nothing)
+    #
+
+    Var writer As clLogWriterEntry = Self.FindWriter(prmWriterId)
+
+    If writer = Nothing Then
+      WriteError(cstMsgWriterNotFound, prmWriterId)
+      Return
+
+    End If
+
+    writer.UpdateSeverityFilter(SeverityLevel, AllowOutput)
+
+    Return
+
+    End Sub
+    Private Function FindWriter(prmWriterId As string) As clLogWriterEntry
+
+    For Each tmp As clLogWriterEntry In writers
+      If tmp.Identity = prmWriterId Then
+        Return tmp
+
+      End If
+
+    Next
+
+    Return Nothing
+    End Function
+    Public Property AcceptedSeverity As clLogingSeverityFilter
+    Public Sub RemoveWriter(prmWriterId As string)
+
+    If prmWriterId = cstInternalWriterId Then
+      WriteError(cstInternalSource, cstMsgCannotRemove, prmWriterId)
+      Return
+
+    End If
+
+    Var indexToRemove As Integer = -1
+
+    For i As Integer = 0 To writers.LastIndex
+      If writers[i].Identity = prmWriterId Then indexToRemove = i
+
+    Next
+
+    If indexToRemove < 0 Then
+      WriteError(cstInternalSource, cstMsgWriterNotFound, prmWriterId)
+
+    Else
+      WriteMessage(cstInternalSource, cstMsgRemovingWriter, prmWriterId)
+      writers.RemoveAt(indexToRemove)
+
+    End If
+
+    Return
+
+
+    End Sub
+    Public Function GetMethodStats(prmMethodName As string) As clLogingMethodStats
+    Var methodInfo As clLogingMethodTimer = Self.TrackedMethods.Lookup(prmMethodName, Nothing)
+
+    If methodInfo <> Nothing Then
+      Var p As clLogingMethodStats = methodInfo.MethodStats()
+
+      Return p.Clone()
+
+    Else
+      Return Nothing
+
+    End If
 
     End Function
 End Class

@@ -1,0 +1,42 @@
+Public Class clLogingSeverityFilter
+
+    Constructor()
+
+    Self.AcceptedSeverity = New Dictionary
+
+    Self.AcceptedSeverity.Value(cstSeverityFatalError) = True
+    Self.AcceptedSeverity.Value(cstSeverityError) = True
+    Self.AcceptedSeverity.Value(cstSeverityWarning) = True
+    Self.AcceptedSeverity.Value(cstSeverityMessage) = True
+    Self.AcceptedSeverity.Value(cstSeverityInformation) = True
+    Self.AcceptedSeverity.Value(cstSeverityStatistics) = True
+    Self.AcceptedSeverity.Value(cstSeveritySummary) = True
+
+    Return
+    End Constructor
+    Private Property AcceptedSeverity As dictionary
+    Public Function AcceptSeverity(SeverityLevel As string) As Boolean
+
+    If AcceptedSeverity = Nothing Then Return False
+
+    Return Self.AcceptedSeverity.Value(SeverityLevel)
+
+
+    End Function
+    Public Sub UpdateSeverityFilter(SeverityLevel As string, AllowOutput As Boolean)
+    #
+    # Update the severity filter on severity level
+    # This filter is applied before forwarding messages to all writers
+    # This is a global filter. Each individual writer may also support a filtering mechanism.
+    #
+    # Parameters:
+    # - severity level 
+    # - enabled/ disable forwarding message of the given severity to the writers
+    #
+    # Returns:
+    # (nothing)
+    #
+    Self.AcceptedSeverity.Value(SeverityLevel) = AllowOutput
+
+    End Sub
+End Class

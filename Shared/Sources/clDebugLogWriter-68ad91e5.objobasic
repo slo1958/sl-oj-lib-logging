@@ -1,16 +1,7 @@
-Public Class clDebugLogWriter Inherits clGenericLogWriter
+Public Class clDebugLogWriter Implements lib_LogManager.itfLogWriter
 
-    Constructor()
-
-    Super.Constructor()
-
-
-
-    End Constructor
-    Public Override Sub AddLogEntry(MessageSeverity As string, MessageTime As string, MessageSource As string, MessageText As string)
+    Public Sub AddLogEntry(MessageSeverity As string, MessageTime As string, MessageSource As string, MessageText As string)
     # Part of the itfLogingWriter interface.
-
-    If Not Self.AcceptSeverity(MessageSeverity) Then Return
 
     If MessageSource.Length > 0 Then
 

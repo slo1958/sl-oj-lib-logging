@@ -1,0 +1,9 @@
+<Window width="800" height="600" title="Window1" platform="macos">
+  <PopupMenu name="PopupMenu1" x="20" y="20" width="432" height="32">
+    <Item text="Introduction" />
+    <Item text="About messages" />
+    <Item text="Tracing execution" />
+    <Item text="Example" />
+  </PopupMenu>
+  <TextArea name="TextArea1" x="20" y="72" width="760" height="432" text="" readOnly="true" fontSize="14" lockRight="true" lockBottom="true" />
+</Window>

@@ -1,12 +1,9 @@
-Public Class clTextFileLogWriter Inherits clGenericLogWriter
+Public Class clTextFileLogWriter Implements lib_LogManager.itfLogWriter
 
   Public Const kMessage As string = "Message"
-    Sub MyMethod()
-    End Sub
     Public Property field_separator As String
     Public Constructor(the_folder As FileSystemItem, the_file_name As string, Optional TimeStampPlaceHolder As string = "")
 
-    Super.Constructor()
 
     field_separator = Chr(9)
 
@@ -70,11 +67,8 @@ Public Class clTextFileLogWriter Inherits clGenericLogWriter
     Return Self.file_error
 
     End Function
-    Public Override Sub AddLogEntry(MessageSeverity As string, MessageTime As string, MessageSource As string, MessageText As string)
+    Public Sub AddLogEntry(MessageSeverity As string, MessageTime As string, MessageSource As string, MessageText As string)
     # Part of the itfLogingWriter interface.
-
-    If Not Self.AcceptSeverity(MessageSeverity) Then Return
-
 
     Try
 

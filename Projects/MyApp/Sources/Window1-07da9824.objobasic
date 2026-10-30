@@ -1,8 +1,107 @@
-Class Window1 Inherits Window
+Public Class Window1 Inherits Window
 
     Event Opened()
-    Print("hello world")
 
+
+    Self.log = lib_LogManager.clLogManager.GetDefaultLogingSupport()
+
+    Self.log.AddWriter("LB01", Listbox1)
+    Self.log.AddWriter("LB02", Listbox2)
+
+    Return
 
     End Event
+    Sub btn_WriteError_Pressed()
+    If Self.log = Nothing Then return
+
+    log.WriteError("TestButton1", "This is an error")
+
+
+    End Sub
+    Public Property log As lib_LogManager.clLogManager
+  Sub btn_WriteWarning_Pressed()
+    If Self.log = Nothing Then return
+
+    log.WriteWarning("TestButton2", "This is a warning")
+
+
+  End Sub
+  Sub btn_WriteInfo_Pressed()
+    If Self.log = Nothing Then return
+
+    log.WriteInfo("TestButton1", "This is an information message")
+
+
+  End Sub
+    Sub btn_ClearListboxes_Pressed()
+    Listbox1.RemoveAllRows()
+    ListBox2.RemoveAllRows()
+
+
+    End Sub
+    Sub cb_Warning_CheckedChanged()
+
+    If log = Nothing Then Return
+
+    log.UpdateWriterSeverityFilter("LB01", lib_LogManager.cstSeverityWarning, Me.Checked)
+
+    End Sub
+    Sub cb_info_CheckedChanged()
+
+    If log = Nothing Then Return
+
+    log.UpdateWriterSeverityFilter("LB01", lib_LogManager.cstSeverityInformation, Me.Checked)
+
+    End Sub
+    Sub CheckBox1_CheckedChanged()
+    If log = Nothing Then Return
+
+    If Me.Checked Then
+      log.EnableWriter("LB01")
+
+    Else
+      log.DisableWriter("LB01")
+
+    End If
+
+    End Sub
+    Sub CheckBox2_CheckedChanged()
+    If log = Nothing Then Return
+
+    If Me.Checked Then
+      log.EnableWriter("LB02")
+
+    Else
+      log.DisableWriter("LB02")
+
+    End If
+
+    End Sub
+  Sub btn_WriteStats_Pressed()
+    If Self.log = Nothing Then return
+
+    log.WriteSummary()
+
+
+
+  End Sub
+    Sub Button6_Pressed()
+    Var w As New Window2
+
+    w.ShowModal(True)
+
+    End Sub
+    Sub btn_AddDebugWriter_Pressed()
+
+    Var w As New clDebugLogWriter
+
+    log.AddWriter("DBG", w)
+
+
+    End Sub
+    Sub btn_RemoveDebugWriter_Pressed()
+
+    log.RemoveWriter("DBG")
+
+    End Sub
 End Class

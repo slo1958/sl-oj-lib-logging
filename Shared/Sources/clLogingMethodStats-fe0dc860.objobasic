@@ -1,6 +1,7 @@
 Public Class clLogingMethodStats
 
-    Public Constructor(totalCount As integer, totalDuration As Double)
+    Public Constructor(MethodName As string, totalCount As integer, totalDuration As Double)
+    self.Name = MethodName
     Self.Count = totalCount
     Self.Duration = totalDuration
 
@@ -18,4 +19,9 @@ Public Class clLogingMethodStats
     End If
 
     End Function
+    Public Function Clone() As clLogingMethodStats
+    Return New clLogingMethodStats(self.Name, Self.Count, Self.Duration)
+
+    End Function
+    Public Property Name As String
 End Class
