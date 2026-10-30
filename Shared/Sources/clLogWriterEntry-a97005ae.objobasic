@@ -23,7 +23,7 @@ Private Class clLogWriterEntry
     Public Function AcceptSeverity(MessageSeverity As string) As Boolean
 
     Try
-      Return Self.AcceptedSeverity.AcceptSeverity(MessageSeverity)
+      Return AcceptedSeverity.AcceptSeverity(MessageSeverity)
 
     Catch e As Exception
       Print("Error: " + e.Message)

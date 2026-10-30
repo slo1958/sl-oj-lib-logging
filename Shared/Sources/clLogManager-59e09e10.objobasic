@@ -321,7 +321,7 @@ Public Class clLogManager Implements itfLogWriter
     # (nothing)
     #
 
-    Var writer As Internals.clLogWriterEntry = Self.FindWriter(prmWriterId)
+    Var writer As Internals.clLogWriterEntry = FindWriter(prmWriterId)
 
     If writer = Nothing Then
       WriteError(cstMsgWriterNotFound, prmWriterId)

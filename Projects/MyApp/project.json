@@ -1,5 +1,5 @@
 {
-  "Version": 6,
+  "Version": 7,
   "Id": "ac8432b7-dc66-40ac-b0db-dc0917ef3196",
   "Name": "MyApp",
   "Type": "Desktop",
@@ -13,6 +13,7 @@
       "osx-arm64"
     ],
     "IncludeODBCSupport": false,
+    "IncludeVideoSupport": false,
     "WorkerProjectIds": [],
     "DefaultWindow": "Window1",
     "DefaultWebPage": "",
