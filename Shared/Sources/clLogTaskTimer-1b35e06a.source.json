@@ -1,6 +1,6 @@
 {
   "Version": 7,
-  "Name": "clLogingTaskTimer",
+  "Name": "clLogTaskTimer",
   "Id": "1b35e06a-9333-46e8-9668-ef5e089e92c5",
   "Kind": "Class",
   "BuildScope": "Application",
@@ -9,7 +9,7 @@
   "ParentModule": "Internals",
   "ParentModuleId": "508c9b4d-44be-467e-afd6-dfaccf683c96",
   "AvailableInDesigner": false,
-  "CodeFile": "clLogingTaskTimer-1b35e06a.objobasic",
+  "CodeFile": "clLogTaskTimer-1b35e06a.objobasic",
   "LayoutFile": "",
   "Notes": [],
   "InspectorBehaviour": []

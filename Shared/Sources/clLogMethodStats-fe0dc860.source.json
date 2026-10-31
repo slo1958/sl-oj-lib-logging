@@ -1,6 +1,6 @@
 {
   "Version": 7,
-  "Name": "clLogingMethodStats",
+  "Name": "clLogMethodStats",
   "Id": "fe0dc860-3316-4b99-af0b-120102b23a94",
   "Kind": "Class",
   "BuildScope": "Application",
@@ -9,7 +9,7 @@
   "ParentModule": "lib_LogManager",
   "ParentModuleId": "e3832525-499e-4d7f-90e7-ed3db6338a38",
   "AvailableInDesigner": false,
-  "CodeFile": "clLogingMethodStats-fe0dc860.objobasic",
+  "CodeFile": "clLogMethodStats-fe0dc860.objobasic",
   "LayoutFile": "",
   "Notes": [],
   "InspectorBehaviour": []

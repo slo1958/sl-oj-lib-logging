@@ -1,11 +1,11 @@
 Private Class clLogingMethodTimer
 
     Public Sub EnterMethod()
-    timers.Append(New clLogingTaskTimer(Self.MethodName))
+    timers.Append(New clLogTaskTimer(Self.MethodName))
 
     End Sub
     Public Property MethodName As String
-    Public Property Timers() As clLogingTaskTimer
+    Public Property Timers() As clLogTaskTimer
     Public Constructor(prmName As string)
     Self.MethodName = prmName
 
@@ -18,12 +18,12 @@ Private Class clLogingMethodTimer
 
     Return
     End Sub
-    Public Function MethodStats() As clLogingMethodStats
+    Public Function MethodStats() As clLogMethodStats
 
     Var count As Integer
     Var totexecution As Double
 
-    For Each entry As clLogingTaskTimer In Self.Timers
+    For Each entry As clLogTaskTimer In Self.Timers
       If entry.Completed() Then
         Pragma note "Nothing to do"
 
@@ -35,7 +35,7 @@ Private Class clLogingMethodTimer
 
     Next
 
-    Return New clLogingMethodStats(MethodName, count, totexecution)
+    Return New clLogMethodStats(MethodName, count, totexecution)
 
     End Function
 End Class

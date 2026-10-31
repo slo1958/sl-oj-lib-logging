@@ -373,7 +373,7 @@ Public Class clLogManager Implements itfLogWriter
     # Returns:
     # (nothing)
     #
-    Var tmp As Internals.clLogingTaskTimer = Internals.clLogingTaskTimer(RunningTasks.Lookup(prmTaskID, Nothing))
+    Var tmp As Internals.clLogTaskTimer = Internals.clLogTaskTimer(RunningTasks.Lookup(prmTaskID, Nothing))
 
     If tmp = Nothing Then
       WriteError(cstInternalSource, cstMsgTaskNotFound, prmTaskID, CurrentMethodName())
@@ -473,7 +473,7 @@ Public Class clLogManager Implements itfLogWriter
     Var methodInfo As Internals.clLogingMethodTimer = Self.TrackedMethods.Lookup(prmMethodName, Nothing)
 
     If methodInfo <> Nothing Then
-      Var p As clLogingMethodStats = methodInfo.MethodStats()
+      Var p As clLogMethodStats = methodInfo.MethodStats()
 
       # Var count As Integer = p.Left
       # Var tottime As Double = p.Duration
@@ -601,7 +601,7 @@ Public Class clLogManager Implements itfLogWriter
     # Returns:
     # (nothing)
     #
-    Var tmp As New Internals.clLogingTaskTimer(prmTaskId)
+    Var tmp As New Internals.clLogTaskTimer(prmTaskId)
     RunningTasks.Value(prmTaskId) = tmp
 
     WriteInfo(cstInternalSource, cstMsgStartTask, prmTaskId)
@@ -702,11 +702,11 @@ Public Class clLogManager Implements itfLogWriter
 
 
     End Sub
-    Public Function GetMethodStats(prmMethodName As string) As clLogingMethodStats
+    Public Function GetMethodStats(prmMethodName As string) As clLogMethodStats
     Var methodInfo As Internals.clLogingMethodTimer = Self.TrackedMethods.Lookup(prmMethodName, Nothing)
 
     If methodInfo <> Nothing Then
-      Var p As clLogingMethodStats = methodInfo.MethodStats()
+      Var p As clLogMethodStats = methodInfo.MethodStats()
 
       Return p.Clone()
 

@@ -1,4 +1,4 @@
-Private Class clLogingTaskTimer
+Private Class clLogTaskTimer
 
     Public Constructor(pTaskId As string)
 
