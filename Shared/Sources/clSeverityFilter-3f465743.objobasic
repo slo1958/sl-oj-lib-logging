@@ -1,4 +1,4 @@
-Public Class clLogingSeverityFilter
+Private Class clSeverityFilter
 
     Constructor()
 
@@ -11,6 +11,7 @@ Public Class clLogingSeverityFilter
     Self.AcceptedSeverity.Value(cstSeverityInformation) = True
     Self.AcceptedSeverity.Value(cstSeverityStatistics) = True
     Self.AcceptedSeverity.Value(cstSeveritySummary) = True
+    Self.AcceptedSeverity.Value(cstSeverityDebug) = True
 
     Return
     End Constructor

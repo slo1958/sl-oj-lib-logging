@@ -1,9 +1,11 @@
-Public Class Window1 Inherits Window
+Public Class wnd_Demo Inherits Window
 
     Event Opened()
 
 
     Self.log = lib_LogManager.clLogManager.GetDefaultLogingSupport()
+
+    Self.log.UpdateWarningMessageHandling(10, True)
 
     Self.log.AddWriter("LB01", Listbox1)
     Self.log.AddWriter("LB02", Listbox2)
@@ -86,7 +88,7 @@ Public Class Window1 Inherits Window
 
   End Sub
     Sub Button6_Pressed()
-    Var w As New Window2
+    Var w As New wnd_About
 
     w.ShowModal(True)
 
@@ -104,4 +106,19 @@ Public Class Window1 Inherits Window
     log.RemoveWriter("DBG")
 
     End Sub
+  Sub btn_WriteWarning1_Pressed()
+    If Self.log = Nothing Then return
+
+    log.WriteWarningWithID("MISCLI", "TestButton2", "Missing customer info")
+
+
+  End Sub
+  Sub btn_WriteWarning2_Pressed()
+    If Self.log = Nothing Then return
+
+    log.WriteWarningWithID("MISPROD", "TestButton2", "Missing product information")
+
+
+
+  End Sub
 End Class

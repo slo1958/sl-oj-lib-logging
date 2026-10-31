@@ -1,7 +1,7 @@
 {
   "Version": 7,
-  "Name": "clLogingMethodTimer",
-  "Id": "44450674-3728-4458-8db6-fed39bb688ed",
+  "Name": "clTaskTimer",
+  "Id": "1b35e06a-9333-46e8-9668-ef5e089e92c5",
   "Kind": "Class",
   "BuildScope": "Application",
   "Namespace": "",
@@ -9,7 +9,7 @@
   "ParentModule": "Internals",
   "ParentModuleId": "508c9b4d-44be-467e-afd6-dfaccf683c96",
   "AvailableInDesigner": false,
-  "CodeFile": "clLogingMethodTimer-44450674.objobasic",
+  "CodeFile": "clTaskTimer-1b35e06a.objobasic",
   "LayoutFile": "",
   "Notes": [],
   "InspectorBehaviour": []

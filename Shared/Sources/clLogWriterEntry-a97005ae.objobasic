@@ -10,12 +10,12 @@ Private Class clLogWriterEntry
     Self.logWriter = Writer
 
 
-    Self.AcceptedSeverity = New clLogingSeverityFilter
+    Self.AcceptedSeverity = New clSeverityFilter
 
     Return
 
     End Constructor
-    Private Property AcceptedSeverity As Internals.clLogingSeverityFilter
+    Private Property AcceptedSeverity As Internals.clSeverityFilter
     Public Sub UpdateSeverityFilter(SeverityLevel As string, AllowOutput As Boolean)
 
     Self.AcceptedSeverity.UpdateSeverityFilter(SeverityLevel, AllowOutput)

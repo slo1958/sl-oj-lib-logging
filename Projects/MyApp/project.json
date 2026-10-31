@@ -15,7 +15,7 @@
     "IncludeODBCSupport": false,
     "IncludeVideoSupport": false,
     "WorkerProjectIds": [],
-    "DefaultWindow": "Window1",
+    "DefaultWindow": "wnd_Demo",
     "DefaultWebPage": "",
     "WebRequestHandler": ""
   },

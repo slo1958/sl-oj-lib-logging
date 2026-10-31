@@ -1,7 +1,7 @@
 {
   "Version": 7,
-  "Name": "clLogingSeverityFilter",
-  "Id": "3f465743-acd6-46f6-a944-72258cfdbcac",
+  "Name": "clMethodTimer",
+  "Id": "44450674-3728-4458-8db6-fed39bb688ed",
   "Kind": "Class",
   "BuildScope": "Application",
   "Namespace": "",
@@ -9,7 +9,7 @@
   "ParentModule": "Internals",
   "ParentModuleId": "508c9b4d-44be-467e-afd6-dfaccf683c96",
   "AvailableInDesigner": false,
-  "CodeFile": "clLogingSeverityFilter-3f465743.objobasic",
+  "CodeFile": "clMethodTimer-44450674.objobasic",
   "LayoutFile": "",
   "Notes": [],
   "InspectorBehaviour": []

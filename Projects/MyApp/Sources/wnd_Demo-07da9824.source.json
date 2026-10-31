@@ -1,6 +1,6 @@
 {
   "Version": 7,
-  "Name": "Window1",
+  "Name": "wnd_Demo",
   "Id": "07da9824-7764-44db-9c11-55dc5aa998bb",
   "Kind": "Window",
   "BuildScope": "Application",
@@ -9,8 +9,8 @@
   "ParentModule": "",
   "ParentModuleId": "",
   "AvailableInDesigner": false,
-  "CodeFile": "Window1-07da9824.objobasic",
-  "LayoutFile": "Window1-07da9824.layout.xml",
+  "CodeFile": "wnd_Demo-07da9824.objobasic",
+  "LayoutFile": "wnd_Demo-07da9824.layout.xml",
   "Notes": [],
   "InspectorBehaviour": []
 }
