@@ -1,6 +1,6 @@
 {
   "Version": 7,
-  "Name": "LibraryInformation",
+  "Name": "LibraryInformation_lib_logging",
   "Id": "89ce649c-405f-4fa8-ae28-f962b9d6ed5e",
   "Kind": "Module",
   "BuildScope": "Application",
@@ -9,7 +9,7 @@
   "ParentModule": "",
   "ParentModuleId": "",
   "AvailableInDesigner": false,
-  "CodeFile": "LibraryInformation-89ce649c.objobasic",
+  "CodeFile": "LibraryInformation_lib_logging-89ce649c.objobasic",
   "LayoutFile": "",
   "Notes": [],
   "InspectorBehaviour": []

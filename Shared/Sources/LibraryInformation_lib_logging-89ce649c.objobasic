@@ -1,4 +1,4 @@
-Public Module LibraryInformation
+Public Module LibraryInformation_lib_logging
 
 Public Const LIBRARY_VERSION As String = "0.1"
 Public Const AUTHOR As String = "SLO1958"
