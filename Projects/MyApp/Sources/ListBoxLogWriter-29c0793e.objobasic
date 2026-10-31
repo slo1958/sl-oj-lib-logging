@@ -2,7 +2,7 @@ Public Class ListBoxLogWriter Inherits ListBox Implements lib_LogManager.itfLogW
 
     Public Sub AddLogEntry(MessageSeverity As string, MessageTime As string, MessageSource As string, MessageText As string)
 
-    Self.ColumnCount = 4
+
     Var row As Integer = Self.AddRow()
 
     Self.SetCellText(row, 0) = MessageSeverity
@@ -16,4 +16,22 @@ Public Class ListBoxLogWriter Inherits ListBox Implements lib_LogManager.itfLogW
 
 
     End Sub
+    Event Opening()
+    Self.ColumnCount = 4
+
+    Self.HasHeaders = True
+
+    Self.SetHeaderText(0) = kSeverity
+    Self.SetHeaderText(1) = kWhen
+    Self.SetHeaderText(2) = kWho
+    Self.SetHeaderText(3) = kMessage
+
+    RaiseEvent Opening()
+
+    End Event
+    Public Const kMessage As string = "Message"
+    Public Const kSeverity As string = "Severity"
+    Public Const kWhen As string = "When"
+    Public Const kWho As string = "Who"
+    Event Opening()
 End Class
