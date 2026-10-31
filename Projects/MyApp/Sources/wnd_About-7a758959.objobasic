@@ -1,4 +1,4 @@
-Public Class Window2 Inherits Window
+Public Class wnd_About Inherits Window
 
     Event Opening()
 
@@ -81,7 +81,7 @@ Public Class Window2 Inherits Window
     s.Append("The logManager provide two sets of methods to trace execution.")
     s.Append("")
     s.Append("EnterMethod() and ExitMethod() are used to tracing the number of calls and the time spent in a method.")
-    s.Append("WriteMethodStats() is used to get the statistics about one method and WriteMethodStatsAll() write the statistics about all methods")
+    s.Append("WriteMethodStatistics() is used to get the statistics about one method and WriteAllMethodStatistics() write the statistics about all methods")
     s.Append("")
     s.Append("StarTask(), EndTask() and EndAllTask() are used to trace the time spent for specific tasks.")
     s.append("The statistics are automatically written when EndTask() is called.")
