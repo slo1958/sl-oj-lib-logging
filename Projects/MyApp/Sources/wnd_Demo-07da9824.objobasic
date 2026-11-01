@@ -7,8 +7,8 @@ Public Class wnd_Demo Inherits Window
 
     Self.log.UpdateWarningMessageHandling(10, True)
 
-    Self.log.AddWriter("LB01", Listbox1)
-    Self.log.AddWriter("LB02", Listbox2)
+    Self.log.AddWriter("LB01", LogListbox1)
+    Self.log.AddWriter("LB02", LogListbox2)
 
     Return
 
@@ -31,13 +31,13 @@ Public Class wnd_Demo Inherits Window
   Sub btn_WriteInfo_Pressed()
     If Self.log = Nothing Then return
 
-    log.WriteInfo("TestButton1", "This is an information message")
+    log.WriteInformation("TestButton1", "This is an information message")
 
 
   End Sub
     Sub btn_ClearListboxes_Pressed()
-    Listbox1.RemoveAllRows()
-    ListBox2.RemoveAllRows()
+    LogListbox1.RemoveAllRows()
+    LogListBox2.RemoveAllRows()
 
 
     End Sub

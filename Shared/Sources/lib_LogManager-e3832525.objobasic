@@ -32,4 +32,7 @@ Private Const cstMsgDisableWriter As String = "logWriter with ID %0 disabled."
 Private Const cstMsgEnableWriter As String = "logWriter with ID %0 enabled."
 Public Const cstSeverityDebug As string = "DBG"
 Private Const cstMsgWarningWithIDMsgDisabled As String = "Warning messages %0 disabled, counter reached %1"
+Private Const cstMsgResetWarningCounterForID As String = " Reset warning counter for %0"
+Private Const cstMsgResetAllWarningCounters As String = " Reset all warning counters."
+Private Const cDefaultExitCode As Integer = -1
 End Module

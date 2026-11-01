@@ -90,7 +90,7 @@ Public Class clLogManager Implements itfLogWriter
 
     internal_WriteMessage(MessageSource, cstSeverityFatalError, internal_ProcessParameters(MessageText, MessageParameters))
 
-    System.Quit(-1)
+    System.Quit(Self.ExitCode)
 
 
     End Sub
@@ -173,6 +173,8 @@ Public Class clLogManager Implements itfLogWriter
 
     Self.AcceptedSeverity = New Internals.clSeverityFilter
 
+    Self.ExitCode = cDefaultExitCode
+
     Return
 
     End Constructor
@@ -185,13 +187,24 @@ Public Class clLogManager Implements itfLogWriter
     # Internal logWriter
     #
 
+    Var temp As String
+
     If MessageSource.Length > 0 Then
-      Print(MessageTime + ". " + MessageSeverity + " " + MessageText + " from " + MessageSource)
+      temp = MessageTime + ". " + MessageSeverity + " " + MessageText + " from " + MessageSource
 
     Else
-      Print(MessageTime + ". " + MessageSeverity + " " + MessageText)
+      temp = MessageTime + ". " + MessageSeverity + " " + MessageText
 
     End If
+
+    If MessageSeverity = cstSeverityError Or MessageSeverity = cstSeverityFatalError Then
+      System.ErrorPrint(temp)
+
+    Else
+      Print(temp)
+
+    End If
+
     End Sub
     Public Sub ClearAllMethods()
     #
@@ -209,7 +222,7 @@ Public Class clLogManager Implements itfLogWriter
     End Sub
     Protected Property warning_limit As integer
     Protected Property SendInfoMessageOnErrorReset As boolean
-    Public Sub WriteInfo(MessageSource As string, MessageText As string, ParamArray MessageParameters As String)
+    Public Sub WriteInformation(MessageSource As string, MessageText As string, ParamArray MessageParameters As String)
     #
     # Write an information message
     # The message may contain place holder %0, %1, ... replaced by corresponding parameters
@@ -250,7 +263,7 @@ Public Class clLogManager Implements itfLogWriter
     ## An information message with a "Statistics" severity
     Public Sub WriteStatistics(MessageText As string, ParamArray MessageParameters As string)
     #
-    # Write an information message
+    # Write an statistic message
     # The message may contain place holder %0, %1, ... replaced by corresponding parameters
     #
     # Parameters
@@ -399,7 +412,7 @@ Public Class clLogManager Implements itfLogWriter
 
       RunningTasks.Remove(prmTaskId)
 
-      WriteInfo(cstInternalSource, cstMsgEndTask, prmTaskID, tmp.GetExecutionTime().ToString(formatForExecutionTime))
+      WriteInformation(cstInternalSource, cstMsgEndTask, prmTaskID, tmp.GetExecutionTime().ToString(formatForExecutionTime))
 
     End If
 
@@ -535,7 +548,7 @@ Public Class clLogManager Implements itfLogWriter
     Self.error_counter = 0
 
     If SendInfoMessageOnErrorReset Then
-      WriteInfo (cstInternalSource, cstMsgResetErrorCounter)
+      WriteInformation(cstInternalSource, cstMsgResetErrorCounter)
 
     End If
 
@@ -553,7 +566,7 @@ Public Class clLogManager Implements itfLogWriter
     Self.warning_counter = 0
 
     If SendInfoMessageOnWarningReset Then
-      WriteInfo (cstInternalSource, cstMsgResetWarningCounter)
+      WriteInformation(cstInternalSource, cstMsgResetWarningCounter)
 
     End If
 
@@ -583,7 +596,7 @@ Public Class clLogManager Implements itfLogWriter
     #
     Self.error_limit = NewLimit
 
-    WriteInfo(cstInternalSource, cstMsgSetErrorLimit, NewLimit.ToString())
+    WriteInformation(cstInternalSource, cstMsgSetErrorLimit, NewLimit.ToString())
 
     Return
 
@@ -602,7 +615,7 @@ Public Class clLogManager Implements itfLogWriter
 
     Self.warning_limit = NewLimit
 
-    WriteInfo(cstInternalSource, cstMsgSetWarningLimit, Self.warning_limit.ToString())
+    WriteInformation(cstInternalSource, cstMsgSetWarningLimit, Self.warning_limit.ToString())
 
     Return
 
@@ -620,7 +633,7 @@ Public Class clLogManager Implements itfLogWriter
     Var tmp As New Internals.clTaskTimer(prmTaskId)
     RunningTasks.Value(prmTaskId) = tmp
 
-    WriteInfo(cstInternalSource, cstMsgStartTask, prmTaskId)
+    WriteInformation(cstInternalSource, cstMsgStartTask, prmTaskId)
 
     Return
 
@@ -842,4 +855,53 @@ Public Class clLogManager Implements itfLogWriter
 
     End Sub
     Public Property WarningCounterByID As Dictionary
+    Public Shared Sub ResetDefault()
+
+    DefaultLogManager = Nothing
+
+    Return
+
+    End Sub
+    Public Sub ResetWarningCounterForID(WarningID As string)
+    #
+    # Reset the warning counter
+    #
+    # Parameters
+    # - WarningID used to identify the warning counter
+    # 
+    # Returns
+    # (nothing)
+    #
+
+    If Self.WarningCounterByID.HasKey(WarningID) Then
+      Self.WarningCounterByID.Value(WarningID) = 0
+
+    End If
+
+    If SendInfoMessageOnWarningReset Then
+      WriteInformation(cstInternalSource, cstMsgResetWarningCounterForID, WarningID)
+
+    End If
+
+    End Sub
+    Public Sub ResetAllWarningCounters()
+    #
+    # Reset the warning counter
+    #
+    # Parameters
+    # (nothing)
+    # 
+    # Returns
+    # (nothing)
+    #
+    Self.warning_counter = 0
+    Self.WarningCounterByID = New Dictionary
+
+    If SendInfoMessageOnWarningReset Then
+      WriteInformation(cstInternalSource, cstMsgResetAllWarningCounters)
+
+    End If
+
+    End Sub
+    Public Property ExitCode As integer
 End Class

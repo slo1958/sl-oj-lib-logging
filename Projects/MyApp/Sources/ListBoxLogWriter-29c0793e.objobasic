@@ -6,7 +6,7 @@ Public Class ListBoxLogWriter Inherits ListBox Implements lib_LogManager.itfLogW
     Var row As Integer = Self.AddRow()
 
     Self.SetCellText(row, 0) = MessageSeverity
-    self.SetCellText(row, 1) = MessageTime
+    Self.SetCellText(row, 1) = MessageTime
     Self.SetCellText(row, 2) = MessageSource
     Self.SetCellText(row, 3) = MessageText
 
