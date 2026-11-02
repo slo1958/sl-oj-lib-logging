@@ -3,5 +3,5 @@ Public Module LibraryInformation_lib_logging
 Public Const LIBRARY_VERSION As String = "0.1"
 Public Const AUTHOR As String = "SLO1958"
 ## This library provides a class to handle log messages and execution time.
-Public Const LIBRARY_INFORMATION As String = "0.1"
+Public Const LIBRARY_INFORMATION As String = "Lib Logging"
 End Module
